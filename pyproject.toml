@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "axon-mk2"
+version = "0.2.0"
+description = "Program Axon MK2 servos from macOS/Linux with the Axon Servo Programmer MK2 (unofficial)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["axon", "servo", "ftc", "robotics", "hid"]
+dependencies = ["hidapi>=0.14"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: System :: Hardware",
+]
+
+[project.scripts]
+axon = "axon:main"
+
+[tool.setuptools]
+py-modules = ["axon"]

@@ -1,0 +1,29 @@
+# --- Axon's own files: never commit these (they are Axon's copyrighted property) ---
+official/
+*.exe
+*.sfm
+*.pcf
+reverse-engineering/deobfuscated-source/
+reverse-engineering/firmware-decrypted/
+reverse-engineering/ui-images/
+reverse-engineering/redo-output/
+
+# --- Third-party tools and code (large, and downloadable elsewhere) ---
+reverse-engineering/toolchain/
+reverse-engineering/third-party-*/
+
+# --- Local data ---
+backups/
+*.svp
+*.log
+
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+
+.DS_Store
