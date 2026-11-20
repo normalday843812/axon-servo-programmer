@@ -1,0 +1,107 @@
+name: Build
+
+# Every push and pull request: run the tests and build the standalone program
+# on each platform. Pushing a tag like v0.2.0 also publishes them as a release.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.asset }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: macos-15, asset: axon-macos-arm64 }
+          - { os: macos-15-intel, asset: axon-macos-x86_64 }
+          - { os: ubuntu-22.04, asset: axon-linux-x86_64 }
+          - { os: ubuntu-22.04-arm, asset: axon-linux-aarch64 }
+          - { os: windows-2025, asset: axon-windows-x86_64.exe }
+    defaults:
+      run:
+        shell: bash
+    env:
+      ASSET: ${{ matrix.asset }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Install
+        run: python -m pip install . "pyinstaller>=6.22,<7"
+
+      - name: Unit tests
+        run: python -m unittest discover -s tests
+
+      - name: Build the standalone program
+        run: |
+          python -m PyInstaller --onefile --name axon --noconfirm --clean axon.py
+          if [ -f dist/axon.exe ]; then mv dist/axon.exe "$ASSET"; else mv dist/axon "$ASSET"; fi
+          ls -l "$ASSET"
+
+      - name: Smoke test the standalone program
+        run: |
+          "./$ASSET" --version
+          "./$ASSET" --help > /dev/null
+          # No programmer is attached here, so this must fail with the normal
+          # "not found" message. Anything else means the USB library is missing.
+          out="$("./$ASSET" info 2>&1 || true)"
+          echo "$out"
+          echo "$out" | grep -q "programmer not found"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.asset }}
+          path: ${{ matrix.asset }}
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    if: github.ref_type == 'tag'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check that the tag matches the version in the code
+        run: |
+          version="$(sed -n 's/^__version__ = "\(.*\)"$/\1/p' axon.py)"
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match version $version in axon.py"
+            exit 1
+          fi
+          if ! grep -qx "version = \"$version\"" pyproject.toml; then
+            echo "::error::pyproject.toml does not say version $version"
+            exit 1
+          fi
+
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd dist
+          ls -l
+          sha256sum axon-* > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          gh release create "$GITHUB_REF_NAME" axon-* SHA256SUMS.txt \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "axon $GITHUB_REF_NAME" \
+            --generate-notes \
+            --notes "Standalone downloads of the axon tool. No Python is needed. Pick the file for your computer and follow the install steps in the README: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY#install"

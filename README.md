@@ -32,14 +32,55 @@ Servo     MAXMK2   firmware AISV112208   mode: Servo (positional)   made 2025-08
 
 - An Axon Servo Programmer MK2 (USB ID `0473:13aa`) and an Axon MK2 servo
   (MAX or MINI).
-- Python 3.9 or newer.
 - macOS. Linux and Windows should work because the USB library supports them,
   but they have not been tried. See [Troubleshooting](#troubleshooting).
+- Python 3.9 or newer, only if you install from source instead of downloading
+  the ready-made program.
 
 The older MK1 programmer (USB ID `0471:13aa`) uses a different protocol and is
 not supported.
 
 ## Install
+
+### Download (no Python needed)
+
+Each [release](https://github.com/normalday843812/axon-servo-programmer/releases/latest)
+has a ready-to-run program for each kind of computer:
+
+| Computer | File |
+| --- | --- |
+| Mac with Apple Silicon (M1 or later) | `axon-macos-arm64` |
+| Mac with an Intel processor | `axon-macos-x86_64` |
+| Linux, x86_64 | `axon-linux-x86_64` |
+| Linux, ARM64 | `axon-linux-aarch64` |
+| Windows | `axon-windows-x86_64.exe` |
+
+On macOS or Linux, download it from a terminal:
+
+```
+curl -L -o axon https://github.com/normalday843812/axon-servo-programmer/releases/latest/download/axon-macos-arm64
+chmod +x axon
+./axon
+```
+
+Replace `axon-macos-arm64` with the file for your computer. To run it from any
+folder, move it onto your PATH:
+
+```
+sudo mkdir -p /usr/local/bin && sudo mv axon /usr/local/bin/
+```
+
+If you download the file with a browser on macOS instead, macOS will refuse to
+run it until you clear the download flag once:
+`xattr -d com.apple.quarantine axon`.
+
+On Windows, download `axon-windows-x86_64.exe` from the release page and run it
+from PowerShell or Command Prompt. Windows may show a warning because the file
+is not signed.
+
+`SHA256SUMS.txt` in each release lists the checksum of every file.
+
+### From source (needs Python)
 
 Download or clone this repository, then from inside its folder:
 
@@ -150,6 +191,7 @@ Tested on a real programmer with a MAX MK2 servo, on macOS:
 | CR-mode settings (`proptl` and the others) | Taken from the official app's code, not yet run on a real servo |
 | MINI MK2 | Not tried |
 | Linux, Windows | Not tried |
+| Release downloads | Built automatically. Each one passes the unit tests and starts correctly on its platform, but none has been run with a programmer attached yet |
 
 If you try one of the untested rows, please open an issue with the result.
 
@@ -184,6 +226,17 @@ Run the tests (no hardware needed) with:
 ```
 python3 -m unittest discover -s tests
 ```
+
+The release downloads are built by GitHub Actions
+([.github/workflows/build.yml](.github/workflows/build.yml)) with PyInstaller.
+To build one yourself:
+
+```
+python3 -m pip install . pyinstaller
+python3 -m PyInstaller --onefile --name axon axon.py
+```
+
+The program is written to `dist/axon`.
 
 ## Credits
 
