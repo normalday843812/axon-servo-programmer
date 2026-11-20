@@ -104,4 +104,4 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --title "axon $GITHUB_REF_NAME" \
             --generate-notes \
-            --notes "Standalone downloads of the axon tool. No Python is needed. Pick the file for your computer and follow the install steps in the README: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY#install"
+            --notes "Standalone builds of the axon tool for macOS, Linux and Windows. Pick the file for your computer and follow the install steps in the README: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY#install"

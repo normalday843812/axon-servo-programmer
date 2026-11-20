@@ -42,10 +42,11 @@ not supported.
 
 ## Install
 
-### Download (no Python needed)
+### Download a release
 
 Each [release](https://github.com/normalday843812/axon-servo-programmer/releases/latest)
-has a ready-to-run program for each kind of computer:
+has a standalone program for each kind of computer. Python does not have to be
+installed to use these.
 
 | Computer | File |
 | --- | --- |
@@ -80,7 +81,7 @@ is not signed.
 
 `SHA256SUMS.txt` in each release lists the checksum of every file.
 
-### From source (needs Python)
+### Install from source
 
 Download or clone this repository, then from inside its folder:
 
