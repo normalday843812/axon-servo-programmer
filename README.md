@@ -1,5 +1,9 @@
 # axon: command-line tool for the Axon Servo Programmer MK2
 
+[![Build](https://github.com/normalday843812/axon-servo-programmer/actions/workflows/build.yml/badge.svg)](https://github.com/normalday843812/axon-servo-programmer/actions/workflows/build.yml)
+[![Latest release](https://img.shields.io/github/v/release/normalday843812/axon-servo-programmer)](https://github.com/normalday843812/axon-servo-programmer/releases/latest)
+[![License](https://img.shields.io/github/license/normalday843812/axon-servo-programmer)](LICENSE)
+
 Programs Axon MK2 servos through the Axon Servo Programmer MK2 (the one with
 the joystick). Runs on macOS and should run on Linux.
 
@@ -194,7 +198,8 @@ Tested on a real programmer with a MAX MK2 servo, on macOS:
 | Linux, Windows | Not tried |
 | Release downloads | Built automatically. Each one passes the unit tests and starts correctly on its platform, but none has been run with a programmer attached yet |
 
-If you try one of the untested rows, please open an issue with the result.
+If you try one of the untested rows, please open a
+[hardware report](https://github.com/normalday843812/axon-servo-programmer/issues/new/choose) with the result.
 
 ## Troubleshooting
 
@@ -222,7 +227,7 @@ and the firmware update sequence.
 [reverse-engineering/](reverse-engineering/) describes how the protocol was
 worked out and contains the scripts that were used.
 
-Run the tests (no hardware needed) with:
+The tests run without a programmer or servo:
 
 ```
 python3 -m unittest discover -s tests
@@ -238,6 +243,11 @@ python3 -m PyInstaller --onefile --name axon axon.py
 ```
 
 The program is written to `dist/axon`.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Changes between versions are listed in
+[CHANGELOG.md](CHANGELOG.md).
 
 ## Credits
 

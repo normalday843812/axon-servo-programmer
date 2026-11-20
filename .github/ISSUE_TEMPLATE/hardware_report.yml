@@ -1,0 +1,73 @@
+name: Hardware report
+description: Tell us whether it worked on hardware or a system the README lists as not tried
+labels: ["hardware report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The README has a table of what has been tested. Reports for the untested rows
+        (MINI MK2, CR-mode firmware, Linux, Windows, the release downloads) are very
+        useful, whether it worked or not.
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Linux
+        - Windows
+    validations:
+      required: true
+  - type: input
+    id: os_version
+    attributes:
+      label: Operating system version
+      placeholder: For example macOS 15.1, Ubuntu 24.04, Windows 11
+  - type: dropdown
+    id: install
+    attributes:
+      label: How you installed it
+      options:
+        - Release download
+        - From source
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: axon version
+      description: The output of "axon --version"
+      placeholder: axon 0.2.0
+    validations:
+      required: true
+  - type: dropdown
+    id: servo
+    attributes:
+      label: Servo
+      options:
+        - MAX MK2
+        - MINI MK2
+    validations:
+      required: true
+  - type: checkboxes
+    id: worked
+    attributes:
+      label: What worked
+      description: Tick everything you tried that worked.
+      options:
+        - label: Reading the settings (axon)
+        - label: Changing a setting (axon set)
+        - label: Save and load (axon save, axon load)
+        - label: Factory default (axon default)
+        - label: Signal output (axon pulse)
+        - label: Flashing Servo-mode firmware
+        - label: Flashing CR-mode firmware
+        - label: Changing settings while in CR mode
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything that did not work, or other notes
+      description: >
+        If a servo is running CR-mode firmware, the first two lines printed by "axon"
+        are especially helpful.

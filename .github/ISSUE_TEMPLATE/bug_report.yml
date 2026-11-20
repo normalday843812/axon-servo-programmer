@@ -1,0 +1,60 @@
+name: Bug report
+description: Something does not work the way the README says it should
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected, and what you got instead.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Command output
+      description: >
+        Run the failing command again with -v in front (for example: axon -v set left=120)
+        and paste what it prints. For a problem with "axon flash", paste only the last
+        30 lines, because the full log contains the firmware file's contents.
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: axon version
+      description: The output of "axon --version"
+      placeholder: axon 0.2.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How you installed it
+      options:
+        - Release download
+        - From source
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS (Apple Silicon)
+        - macOS (Intel)
+        - Linux
+        - Windows
+    validations:
+      required: true
+  - type: dropdown
+    id: servo
+    attributes:
+      label: Servo
+      options:
+        - MAX MK2
+        - MINI MK2
+        - Other or no servo attached
+    validations:
+      required: true
